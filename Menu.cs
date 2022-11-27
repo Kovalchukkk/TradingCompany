@@ -54,7 +54,8 @@ Choose an operation:
 6 - To delete a trainer by index;
 C - To create a category of goods;
 A - To view all categories of goods;
-P - To view the most popular trainer;
+U - To update specific category;
+D - To delete specific category;
 0 - Exit;
 ";
 			Console.WriteLine(menu);
@@ -88,19 +89,12 @@ P - To view the most popular trainer;
                 case "A":
                     MenuGetAllCategories();
                     break;
-                //case "P":
-                //	try
-                //	{
-                //		VisitorRepository.Show();
-                //		Console.WriteLine(helper.ShowTheMostPopularTrainer());
-                //	}
-
-                //	catch (FormatException)
-                //	{
-                //		logger.Exception("The list of trainers is empty!");
-                //		Console.WriteLine("The list of trainers is empty!");
-                //	}
-                //	break;
+                case "U":
+                    MenuCategoryUpdate();
+                    break;
+                case "D":
+                    MenuCategoryDelete();
+                    break;
                 default:
 					break;
 			}
@@ -167,6 +161,30 @@ P - To view the most popular trainer;
             {
                 Console.WriteLine($"{category.CategoryId}\t{category.Name}");
             }
+        }
+
+        void MenuCategoryUpdate()
+        {
+            Console.WriteLine("Enter name of new category: ");
+            string newName = Console.ReadLine();
+            Console.WriteLine("Enter id of old category");
+            int id = int.Parse(Console.ReadLine());
+            var dal = new CategoryDal(Mapper);
+            var newCategory = new CategoryDTO
+            {
+                Name = newName
+            };
+            var updatedCategory = dal.UpdateCategory(newCategory, id);
+            Console.WriteLine($"Updated category ID: {updatedCategory.CategoryId}\tNAME: {updatedCategory.Name}");
+        }
+
+        void MenuCategoryDelete()
+        {
+            Console.WriteLine("Enter id of category you would like to delete: ");
+            int id = int.Parse(Console.ReadLine());
+            var dal = new CategoryDal(Mapper);
+            var deletedCategory = dal.DeleteCategory(id);
+            Console.WriteLine($"Deleted category ID: {deletedCategory.CategoryId}\tNAME: {deletedCategory.Name}");
         }
 
     }

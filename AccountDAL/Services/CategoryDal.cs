@@ -35,5 +35,36 @@ namespace DAL.Services
                 return mapper.Map<List<CategoryDTO>>(categories);
             }
         }
+
+        public CategoryDTO UpdateCategory(CategoryDTO newCategory, int id)
+        {
+            using (var entities = new TradingCompany2022TESTEntities())
+            { 
+                var categoryToUpdate = entities.Categories.Find(id);
+                if (categoryToUpdate != null)
+                {
+                    var newCategoryDB = mapper.Map<Category>(newCategory);
+                    categoryToUpdate.Name = newCategoryDB.Name;
+                    entities.SaveChanges();
+                    return mapper.Map<CategoryDTO>(categoryToUpdate);
+                }
+                return null;
+            }
+        }
+
+        public CategoryDTO DeleteCategory(int id)
+        {
+            using (var entities = new TradingCompany2022TESTEntities())
+            {
+                var categoryToDelete = entities.Categories.Find(id);
+                if (categoryToDelete != null)
+                {
+                    entities.Categories.Remove(categoryToDelete);
+                    entities.SaveChanges();
+                    return mapper.Map<CategoryDTO>(categoryToDelete);
+                }
+                return null;
+            }
+        }
     }
 }
